@@ -50,11 +50,11 @@ class CPDataset(data.Dataset):
 
         # cloth image & cloth mask
         if self.stage == 'GMM':
-            c = Image.open(osp.join(self.data_path, 'cloth', c_name))
-            cm = Image.open(osp.join(self.data_path, 'cloth-mask', c_name))
+            c = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'cloth', c_name))
+            cm = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'cloth-mask', c_name))
         else:
-            c = Image.open(osp.join(self.data_path, 'warp-cloth', c_name))
-            cm = Image.open(osp.join(self.data_path, 'warp-mask', c_name))
+            c = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'warp-cloth', c_name))
+            cm = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'warp-mask', c_name))
      
         c = self.transform(c)  # [-1,1]
         cm_array = np.array(cm)
@@ -63,12 +63,12 @@ class CPDataset(data.Dataset):
         cm.unsqueeze_(0)
 
         # person image 
-        im = Image.open(osp.join(self.data_path, 'image', im_name))
+        im = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train' 'image', im_name))
         im = self.transform(im) # [-1,1]
 
         # load parsing image
         parse_name = im_name.replace('.jpg', '.png')
-        im_parse = Image.open(osp.join(self.data_path, 'image-parse', parse_name))
+        im_parse = Image.open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'image-parse', parse_name))
         parse_array = np.array(im_parse)
         parse_shape = (parse_array > 0).astype(np.float32)
         parse_head = (parse_array == 1).astype(np.float32) + \
@@ -93,7 +93,7 @@ class CPDataset(data.Dataset):
 
         # load pose points
         pose_name = im_name.replace('.jpg', '_keypoints.json')
-        with open(osp.join(self.data_path, 'pose', pose_name), 'r') as f:
+        with open(osp.join('/kaggle/input/js-cp-vton-data/data/train', 'pose', pose_name), 'r') as f:
             pose_label = json.load(f)
             pose_data = pose_label['people'][0]['pose_keypoints']
             pose_data = np.array(pose_data)
